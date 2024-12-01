@@ -26,6 +26,10 @@ class Player
 
         // More methods to be added here
 
+        bool foodConsumption (); 
+        bool selfCrash (); 
+        void increaseLength (); 
+
     private:
         objPos playerPos; // Upgrade this in iteration 3.       
         enum Dir myDir;

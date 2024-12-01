@@ -28,7 +28,7 @@ GameMechs::GameMechs(int boardX, int boardY)
 // do you need a destructor?
 GameMechs::~GameMechs()
 {
-    //Since no dynamic memory is used, a destructor is not needed
+    ; //Since no dynamic memory is used, a destructor is not needed
 }
 
 bool GameMechs::getExitFlagStatus() const

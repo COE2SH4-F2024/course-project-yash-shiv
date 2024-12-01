@@ -1,162 +1,204 @@
 #include "Player.h"
+#include <iostream>
 
-
-Player::Player(GameMechs* thisGMRef)
+// Constructor: Initialize the snake with a single segment
+Player::Player(GameMechs *thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
     myDir = STOP;
 
-    // more actions to be included
-    playerPositionList = new objPosArrayList();
-    objPos temporaryPosition (mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '*'); 
-
-    playerPositionList->insertHead(temporaryPosition);
+    // Initialize the player's position list
+    playerPosList = new objPosArrayList();
+    objPos temporaryPosition(mainGameMechsRef->getBoardSizeX() / 2, mainGameMechsRef->getBoardSizeY() / 2, '*');
+    playerPosList->insertHead(temporaryPosition);
 }
 
-
+// Destructor: Clean up dynamically allocated memory
 Player::~Player()
 {
-    // delete any heap members here
-    delete playerPositionList;
+    delete playerPosList;
 }
 
-objPosArrayList* Player::getPlayerPos()
+// Get reference to the entire snake body
+objPosArrayList *Player::getPlayerPosList() const
 {
-    // return the reference to the playerPos arrray list
-    return playerPositionList;
+    return playerPosList;
 }
 
+// Update the player's direction based on input
 void Player::updatePlayerDir()
 {
-        // PPA3 input processing logic 
     char input;
 
     input = mainGameMechsRef->getInput();
 
-    switch(input)
-    {   
-        case 27:
-                mainGameMechsRef ->setExitTrue();
-                break;
-        case 'w':
-            if(myDir != DOWN)
-            {
+    switch (input)
+    {
+    case 27:
+        mainGameMechsRef->setExitTrue();
+        break;
+    case 'w':
+        if (myDir != DOWN)
+        {
             myDir = UP;
-            }
-            break;
+        }
+        break;
 
-        case 'a':
-            if(myDir != RIGHT)
-            {
+    case 'a':
+        if (myDir != RIGHT)
+        {
             myDir = LEFT;
-            }
-            break;
+        }
+        break;
 
-        case 's':
-            if(myDir != UP)
-            {
+    case 's':
+        if (myDir != UP)
+        {
             myDir = DOWN;
-            }
-            break;
+        }
+        break;
 
-        case 'd':
-            if(myDir != LEFT)
-            {
+    case 'd':
+        if (myDir != LEFT)
+        {
             myDir = RIGHT;
-            }
-            break;
+        }
+        break;
 
-        case 'W':
-            if(myDir != DOWN)
-            {
+    case 'W':
+        if (myDir != DOWN)
+        {
             myDir = UP;
-            }
-            break;
+        }
+        break;
 
-        case 'A':
-            if(myDir != RIGHT)
-            {
+    case 'A':
+        if (myDir != RIGHT)
+        {
             myDir = LEFT;
-            }
-            break;
+        }
+        break;
 
-        case 'S':
-            if(myDir != UP)
-            {
+    case 'S':
+        if (myDir != UP)
+        {
             myDir = DOWN;
-            }
-            break;
+        }
+        break;
 
-        case 'D':
-            if(myDir != LEFT)
-            {
+    case 'D':
+        if (myDir != LEFT)
+        {
             myDir = RIGHT;
-            }
-            break;
+        }
+        break;
 
-        default:
-            break;
-    }        
+    default:
+        break;
+    }
 }
 
+// Move the snake (head and body)
 void Player::movePlayer()
 {
-    objPos headPosition = playerPositionList->getHeadElement(); //The current head positioning 
+    objPos headPosition = playerPosList->getHeadElement(); // The current head position
 
-    int boardSizeX, boardSizeY; 
+    int boardSizeX, boardSizeY;
 
-    boardSizeX = mainGameMechsRef->getBoardSizeX ();
-    boardSizeY = mainGameMechsRef->getBoardSizeY ();
+    boardSizeX = mainGameMechsRef->getBoardSizeX();
+    boardSizeY = mainGameMechsRef->getBoardSizeY();
 
-    int newPositionX, newPositionY; 
-    newPositionX = headPosition.pos->x;
-    newPositionY = headPosition.pos->y;
+    int newPositionX = headPosition.pos->x;
+    int newPositionY = headPosition.pos->y;
 
-
-    // PPA3 Finite State Machine logic
+    // Finite State Machine logic
     switch (myDir)
     {
-       case LEFT:
-            if(newPositionX == 0)
-            {
-                newPositionX = boardSizeX - 1;
-            }
-            newPositionX--;
-            
-            break;
+    case LEFT:
+        if (newPositionX == 0)
+        {
+            newPositionX = boardSizeX - 1;
+        }
+        newPositionX--;
+        break;
 
-        case RIGHT:
-            if(newPositionX == boardSizeX - 1)
-            {
-                newPositionX = 0;
-            }
-            newPositionX++;
-            
-            break;
+    case RIGHT:
+        if (newPositionX == boardSizeX - 1)
+        {
+            newPositionX = 0;
+        }
+        newPositionX++;
+        break;
 
-        case UP:
-            if(newPositionY==0)
-            {
-                newPositionY = boardSizeY - 1;
-            }
-            newPositionY--;
-            
-            break;
+    case UP:
+        if (newPositionY == 0)
+        {
+            newPositionY = boardSizeY - 1;
+        }
+        newPositionY--;
+        break;
 
-        case DOWN:
-            if(newPositionY == boardSizeY - 1)
-            {
-                newPositionY = 0;
-            }
-            newPositionY++;
-            
-            break;
+    case DOWN:
+        if (newPositionY == boardSizeY - 1)
+        {
+            newPositionY = 0;
+        }
+        newPositionY++;
+        break;
 
-        default:
-            break; 
+    default:
+        break;
     }
-    playerPositionList->insertHead(headPosition);
+
+    // Create a new head position and insert it into the list
+    objPos newHead(newPositionX, newPositionY, '*');
+    playerPosList->insertHead(newHead);
+
+    // Check for food collision and self-collision
+    if (foodConsumption())
+    {
+        increaseLength(); // Grow the snake on food consumption
+    }
+    else
+    {
+        playerPosList->removeTail(); // Remove the tail if no food is consumed
+    }
+
+    if (selfCrash())
+    {
+        mainGameMechsRef->setLoseFlag();
+        mainGameMechsRef->setExitTrue();
+    }
 }
 
-// More methods to be added
+// Check if the snake consumes food
+bool Player::foodConsumption()
+{
+    objPos head = playerPosList->getHeadElement();
+    objPos food = mainGameMechsRef->getFood();
+    return (head.pos->x == food.pos->x && head.pos->y == food.pos->y);
+}
 
+// Grow the snake on food consumption
+void Player::increaseLength()
+{
+    mainGameMechsRef->generateFood(*playerPosList); // Generate new food at a valid position
+    mainGameMechsRef->incrementScore();             // Increment score
+}
+
+// Detect if the snake collides with itself
+bool Player::selfCrash()
+{
+    objPos head = playerPosList->getHeadElement();
+
+    // Check each body segment against the head
+    for (int i = 1; i < playerPosList->getSize(); ++i)
+    {
+        objPos segment = playerPosList->getElement(i);
+        if (head.pos->x == segment.pos->x && head.pos->y == segment.pos->y)
+        {
+            return true; // Collision detected
+        }
+    }
+    return false;
+}

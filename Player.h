@@ -7,33 +7,42 @@
 
 class Player
 {
-    // Construct the remaining declaration from the project manual.
+public:
+    // Direction states
+    enum Dir
+    {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT,
+        STOP
+    };
 
-    // Only some sample members are included here
+    // Constructor and Destructor
+    Player(GameMechs *thisGMRef);
+    ~Player();
 
-    // You will include more data members and member functions to complete your design.
+    // Core Functionalities
+    objPos getPlayerPos() const;               // Get the player's head position
+    objPosArrayList *getPlayerPosList() const; // Get the snake's entire body
+    void updatePlayerDir();                    // Update player's direction based on input
+    void movePlayer();                         // Move the snake head and handle body tracking
+    bool foodConsumption();                    // Check and handle food collision
+    bool selfCrash();                          // Detect self-collision
+    void increaseLength();                     // Grow the snake on food consumption
 
-    
-    public:
-        enum Dir {UP, DOWN, LEFT, RIGHT, STOP};  // This is the direction state
+    // New Methods for Rendering and Interaction
+    void drawPlayer() const; // Draw the snake on the game board
+    void resetPlayer();      // Reset snake to its initial state
 
-        Player(GameMechs* thisGMRef);
-        ~Player();
+private:
+    // Player attributes
+    objPos playerPos;               // Current head position
+    objPosArrayList *playerPosList; // Snake body segments
+    Dir myDir;                      // Current direction of movement
 
-        objPosArrayList* getPlayerPos(); // Upgrade this in iteration 3.       
-        void updatePlayerDir();
-        
-        void movePlayer();
-
-        // More methods to be added here 
-
-    private:
-        //objPos playerPos; // Upgrade this in iteration 3.       
-        enum Dir myDir;
-        objPosArrayList* playerPositionList; 
-
-        // Need a reference to the Main Game Mechanisms
-        GameMechs* mainGameMechsRef;
+    // Game mechanisms reference
+    GameMechs *mainGameMechsRef;
 };
 
 #endif

@@ -15,14 +15,12 @@ void DrawScreen(void);
 void LoopDelay(void);
 void CleanUp(void);
 
-
-
 int main(void)
 {
 
     Initialize();
 
-    while(exitFlag == false)  
+    while (exitFlag == false)
     {
         GetInput();
         RunLogic();
@@ -31,9 +29,7 @@ int main(void)
     }
 
     CleanUp();
-
 }
-
 
 void Initialize(void)
 {
@@ -45,17 +41,20 @@ void Initialize(void)
 
 void GetInput(void)
 {
-   
 }
 
 void RunLogic(void)
 {
-    
 }
 
 void DrawScreen(void)
 {
-    MacUILib_clearScreen();    
+    MacUILib_clearScreen();
+    objPos food = gameMechs->getFood();
+    if (x == food.x && y == food.y)
+    {
+        std::cout << food.symbol; // Draw the food
+    }
 }
 
 void LoopDelay(void)
@@ -63,10 +62,9 @@ void LoopDelay(void)
     MacUILib_Delay(DELAY_CONST); // 0.1s delay
 }
 
-
 void CleanUp(void)
 {
-    MacUILib_clearScreen();    
+    MacUILib_clearScreen();
 
     MacUILib_uninit();
 }

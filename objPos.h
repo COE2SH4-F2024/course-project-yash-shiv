@@ -24,7 +24,7 @@ class objPos
         
         objPos(const objPos &reference); // Added copy constructor - Shiv
 
-        objPos& operator = (const objPos &reference); //Addeded assignment operator - Shiv
+        objPos& operator= (const objPos &reference); //Addeded assignment operator - Shiv
 
 
 

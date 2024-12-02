@@ -14,6 +14,8 @@ Food::~Food()
 
 void Food::generateFood(objPosArrayList *blockOff)
 {
+    srand(time(0)); // Seeds the random number generator with the current time
+
     int i; 
     int foodPosX, foodPosY;
     bool condition = false; // Start with an invalid position

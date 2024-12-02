@@ -6,6 +6,7 @@
 
 #include "objPos.h"
 #include "objPosArrayList.h"
+#include "MacUILib.h"
 
 using namespace std;
 
@@ -43,6 +44,8 @@ class GameMechs
         void incrementScore();
         
         // More methods should be added here
-};
+
+        void GameMechs::userInput();
+}; 
 
 #endif

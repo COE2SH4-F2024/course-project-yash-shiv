@@ -4,7 +4,7 @@
 Food::Food(GameMechs *gameRef, objPosArrayList *playerPos)
 {
     mainGameMechsRef = gameRef;
-    foodPos.symbol = 'o';
+    foodPos.symbol = '$';
     generateFood(playerPos);
 }
 

@@ -25,7 +25,7 @@ private:
 public:
     GameMechs();
     GameMechs(int boardX, int boardY);
-    //~GameMechs(); // Not needed (explanaition in next cpp file)
+    ~GameMechs(); // Not needed (explanaition in next cpp file)
 
     bool getExitFlagStatus() const;
     void setExitTrue();

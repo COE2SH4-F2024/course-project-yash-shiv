@@ -22,11 +22,11 @@ GameMechs::GameMechs(int boardX, int boardY)
     boardSizeY = boardY;
 }
 
-/* No destructor needed as nothing is on the heap
+//No destructor needed as nothing is on the heap
 GameMechs::~GameMechs()
 {
 }
-*/
+
 
 bool GameMechs::getExitFlagStatus() const
 {

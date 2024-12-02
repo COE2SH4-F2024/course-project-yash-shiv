@@ -1,5 +1,4 @@
 #include "GameMechs.h"
-#include "MacUILib.h"
 
 GameMechs::GameMechs()
 {
@@ -19,17 +18,15 @@ GameMechs::GameMechs(int boardX, int boardY)
     loseFlag = false;
     score = 0;
 
-    boardSizeX = boardSizeX;
-    boardSizeY = boardSizeY;
-
-    
+    boardSizeX = boardX;
+    boardSizeY = boardY;
 }
 
-// do you need a destructor?
+/* No destructor needed as nothing is on the heap
 GameMechs::~GameMechs()
 {
-    ; //Since no dynamic memory is used, a destructor is not needed
 }
+*/
 
 bool GameMechs::getExitFlagStatus() const
 {
@@ -40,7 +37,6 @@ bool GameMechs::getLoseFlagStatus() const
 {
     return loseFlag;
 }
-    
 
 char GameMechs::getInput() const
 {
@@ -54,7 +50,7 @@ int GameMechs::getScore() const
 
 void GameMechs::incrementScore()
 {
-    score++; 
+    score++;
 }
 
 int GameMechs::getBoardSizeX() const
@@ -67,7 +63,6 @@ int GameMechs::getBoardSizeY() const
     return boardSizeY;
 }
 
-
 void GameMechs::setExitTrue()
 {
     exitFlag = true;
@@ -75,7 +70,7 @@ void GameMechs::setExitTrue()
 
 void GameMechs::setLoseFlag()
 {
-    loseFlag = true;   
+    loseFlag = true;
 }
 
 void GameMechs::setInput(char this_input)
@@ -89,11 +84,3 @@ void GameMechs::clearInput()
 }
 
 // More methods should be added here
-void GameMechs::userInput()
-{
-    if (MacUILib_hasChar()) 
-    {
-        input = MacUILib_getChar();
-    }
-
-}

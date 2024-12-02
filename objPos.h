@@ -2,7 +2,7 @@
 #define OBJPOS_H
 
 // Not really a C++ thing
-typedef struct 
+typedef struct
 {
     int x;
     int y;
@@ -10,32 +10,40 @@ typedef struct
 
 class objPos
 {
-    public:
-        Pos* pos;        
-        char symbol;
+public:
+    Pos *pos;
+    char symbol;
 
-        objPos();
-        objPos(int xPos, int yPos, char sym);
-        
-        // Respect the rule of six / minimum four
-        // [TODO] Implement the missing special member functions to meet the minimum four rule
-        
-        ~objPos(); // Addeded destructor - Shiv
-        
-        objPos(const objPos &reference); // Added copy constructor - Shiv
+    objPos();
+    objPos(int xPos, int yPos, char sym);
 
-        objPos& operator= (const objPos &reference); //Addeded assignment operator - Shiv
+    // Respect the rule of six / minimum four
+    // [TODO] Implement the missing special member functions to meet the minimum four rule
 
+    ~objPos(); // Destrcutor
 
+    // Copy Constructor
+    objPos(const objPos &reference);
 
-        void setObjPos(objPos o);        
-        void setObjPos(int xPos, int yPos, char sym);  
+    // Copy Assignemnt Operator
+    objPos &operator= (const objPos &reference);
 
-        objPos getObjPos() const;
-        char getSymbol() const;
-        char getSymbolIfPosEqual(const objPos* refPos) const;
-        
-        bool isPosEqual(const objPos* refPos) const;
+    bool operator==(const objPos &other);
+
+    void setObjPos(objPos o);
+    void setObjPos(int xPos, int yPos, char sym);
+
+    objPos getObjPos() const;
+    char getSymbol() const;
+    char getSymbolIfPosEqual(const objPos *refPos) const;
+
+    bool isPosEqual(const objPos *refPos) const;
+
+    void xPosIncrease();
+    void xPosDecrease();
+    void yPosIncrease();
+    void yPosDecrease();
+    
 };
 
 #endif

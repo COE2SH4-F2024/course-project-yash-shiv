@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include "MacUILib.h"
 #include "objPos.h"
@@ -8,8 +9,9 @@
 using namespace std;
 
 #define DELAY_CONST 100000
+#define MAXSPEED 5 // maximum levels of speed
 
-bool exitFlag;
+bool win; // this is to check the winning condition (if the snake is as long as the board)
 
 void Initialize(void);
 void GetInput(void);
@@ -22,6 +24,9 @@ void CleanUp(void);
 Player *myPlayer;
 GameMechs *snakeGame;
 Food *myFood;
+
+int speedLevels[MAXSPEED]; // array containing different speed levels
+int currentSpeedIndex;     // current speed
 
 int main(void)
 {
@@ -47,27 +52,46 @@ void Initialize(void)
     snakeGame = new GameMechs(30, 15);
     myPlayer = new Player(snakeGame);
     myFood = new Food(snakeGame, myPlayer->getPlayerPos());
+    win = false; // initally starts off as 0
 
-    //exitFlag = false;
+    currentSpeedIndex = 2; // current speed
+
+    // defining the speed levels
+    speedLevels[0] = 330000;
+    speedLevels[1] = 250000;
+    speedLevels[2] = 100000;
+    speedLevels[3] = 70000;
+    speedLevels[4] = 48000;
 }
 
 void GetInput(void)
 {
     if (MacUILib_hasChar())
     {
-        char userInput; 
+        char userInput;
 
         userInput = MacUILib_getChar();
 
-        snakeGame->setInput(userInput);
-        
+        snakeGame->setInput(userInput); // storing the character
+
         if (userInput == 27)
         {
-            snakeGame->setExitTrue();
+            snakeGame->setExitTrue(); // this is the escape to leave the game
+        }
+
+        // this is to manage the speed level
+        if (userInput == '+' && currentSpeedIndex < 4)
+        {
+            currentSpeedIndex++;
+        }
+        else if (userInput == '-' && currentSpeedIndex > 0)
+        {
+            currentSpeedIndex--;
         }
     }
     else
     {
+
         snakeGame->setInput(0);
     }
 }
@@ -96,13 +120,16 @@ void DrawScreen(void)
     MacUILib_printf("-------------------------------------------------------------------\n");
 
     // Display warning if snake can collide with itself
-    if (snakeGame->getScore() >= 4)  // Changed the condition for clarity
+    if (snakeGame->getScore() >= 4) // Changed the condition for clarity
     {
         MacUILib_printf("\nWARNING: Your snake is now capable of colliding with itself. Make your moves wisely.\n\n");
     }
 
+    MacUILib_printf("1: Turtle Speed,   2: Slow,   3: Medium,   4: Fast,   5: Fastest\n\n");
+    MacUILib_printf("Speed Level: %d (Press '+' to increase, '-' to decrease)\n", currentSpeedIndex + 1);
+    MacUILib_printf("-------------------------------------------------------------------\n");
     // Draw the game board
-    int x, y; 
+    int x, y;
 
     for (y = 0; y < snakeGame->getBoardSizeY(); y++)
     {
@@ -111,7 +138,7 @@ void DrawScreen(void)
             // Handle the borders
             if (x == 0 || x == snakeGame->getBoardSizeX() - 1 || y == 0 || y == snakeGame->getBoardSizeY() - 1)
             {
-                MacUILib_printf("#");  // Draw border
+                MacUILib_printf("#"); // Draw border
                 continue;
             }
             else
@@ -125,9 +152,9 @@ void DrawScreen(void)
 
                     if (x == segment.pos->x && y == segment.pos->y)
                     {
-                        MacUILib_printf("%c", segment.symbol);  // Draw snake segment
+                        MacUILib_printf("%c", segment.symbol); // Draw snake segment
                         isPrinted = true;
-                        break; 
+                        break;
                     }
                 }
 
@@ -136,16 +163,16 @@ void DrawScreen(void)
                 {
                     if (x == myFood->getFoodPos().pos->x && y == myFood->getFoodPos().pos->y)
                     {
-                        MacUILib_printf("%c", myFood->getFoodPos().symbol);  // Draw food
+                        MacUILib_printf("%c", myFood->getFoodPos().symbol); // Draw food
                     }
                     else
                     {
-                        MacUILib_printf(" ");  // Draw empty space
+                        MacUILib_printf(" "); // Draw empty space
                     }
                 }
             }
         }
-        MacUILib_printf("\n");  // Move to the next line after finishing a row
+        MacUILib_printf("\n"); // Move to the next line after finishing a row
     }
 
     // Print the game stats
@@ -155,34 +182,56 @@ void DrawScreen(void)
     MacUILib_printf("Food Eaten/Game Score: %d\n", snakeGame->getScore());
     if (snakeGame->getScore() == 0)
     {
-        MacUILib_printf("Current Snake Length: %d (It's Just the head itself LOL!)\n ", snakeGame->getScore() + 1);
+        MacUILib_printf("Current Snake Length: %d (It's Just the head itself LOL!)\n", snakeGame->getScore() + 1);
     }
     else
     {
         MacUILib_printf("Current Snake Length: %d\n", snakeGame->getScore() + 1);
     }
-    MacUILib_printf("\n");
 
     // Check if the game has ended
     if (snakeGame->getLoseFlagStatus())
     {
-        snakeGame->setExitTrue();  // Set the exit flag if the game is over
+        snakeGame->setExitTrue(); // Set the exit flag if the game is over
     }
-    
+
+    // THIS IS THE WINNING CONDITION
+    if ((snakeGame->getScore() + 1) >= 364) // the size is excluding the border
+    {                                       // doing snakeGame->getScore + 1 is effectively finding the length of the snake
+        win = true;
+        snakeGame->setExitTrue(); // Exiting the game because the player won
+    }
 }
-
-
 
 void LoopDelay(void)
 {
-    MacUILib_Delay(DELAY_CONST); 
+    MacUILib_Delay(speedLevels[currentSpeedIndex]); // dynamically change the delay
 }
 
 void CleanUp(void)
 {
     MacUILib_clearScreen();
 
-    MacUILib_printf("Games over :( Thanks for Playing!\n");
+    MacUILib_Delay(1); // delay before showing the message
+
+    if (win)
+    { // Message for player winning
+        MacUILib_printf("CONGRATULATIONS, YOU WON! Not many people beat this game.\n I'd give myself a pat on the back if I were you :)\n");
+    }
+    else if (snakeGame->getLoseFlagStatus())
+    {
+        // Message for losing (collision with self)
+        MacUILib_printf("-------------------------------------------------------------\n");
+        MacUILib_printf("GAME OVER! You collided with yourself. Better luck next time!\n");
+        MacUILib_printf("-------------------------------------------------------------\n");
+    }
+    else if (snakeGame->getExitFlagStatus())
+    {
+        // Message for quitting
+        MacUILib_printf("-----------------------------------------------\n");
+        MacUILib_printf("You chose to quit the game. Thanks for playing!\n");
+        MacUILib_printf("-----------------------------------------------\n");
+    }
 
     MacUILib_uninit();
 

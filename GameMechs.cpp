@@ -2,11 +2,14 @@
 
 GameMechs::GameMechs()
 {
+
+    // intializing the game variables
     input = 0;
     exitFlag = false;
     loseFlag = false;
     score = 0;
 
+    // this is setting the default board size
     boardSizeX = 30;
     boardSizeY = 15;
 }
@@ -18,15 +21,10 @@ GameMechs::GameMechs(int boardX, int boardY)
     loseFlag = false;
     score = 0;
 
+    // different sizes for the board
     boardSizeX = boardX;
     boardSizeY = boardY;
 }
-
-//No destructor needed as nothing is on the heap
-GameMechs::~GameMechs()
-{
-}
-
 
 bool GameMechs::getExitFlagStatus() const
 {
@@ -75,12 +73,10 @@ void GameMechs::setLoseFlag()
 
 void GameMechs::setInput(char this_input)
 {
-    input = this_input;
+    input = this_input; // setting the input with what the user entered
 }
 
 void GameMechs::clearInput()
 {
     input = 0;
 }
-
-// More methods should be added here

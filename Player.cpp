@@ -1,6 +1,6 @@
 #include "Player.h"
-//#include "MacUILib.h"
-//#include <iostream>
+// #include "MacUILib.h"
+// #include <iostream>
 
 Player::Player(GameMechs *thisGMRef)
 {
@@ -8,10 +8,9 @@ Player::Player(GameMechs *thisGMRef)
     myDir = STOP;
 
     playerPosList = new objPosArrayList();
-    objPos start1 = objPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '*');
-    
-    playerPosList->insertTail(start1);
+    objPos start1 = objPos(mainGameMechsRef->getBoardSizeX() / 2, mainGameMechsRef->getBoardSizeY() / 2, '*');
 
+    playerPosList->insertTail(start1);
 }
 
 Player::~Player()
@@ -25,121 +24,123 @@ objPosArrayList *Player::getPlayerPos() const
     return this->playerPosList;
 }
 
+// FSM logic from PPA3
 void Player::updatePlayerDir()
 {
-    // PPA3 input processing logic
+
     if (mainGameMechsRef->getInput() != 0)
     {
         switch (mainGameMechsRef->getInput())
         {
-            { 
+            {
             case 27:
                 mainGameMechsRef->setExitTrue();
                 break;
 
             case 'w':
-                if(myDir != DOWN)
+                if (myDir != DOWN)
                 {
-                myDir = UP;
+                    myDir = UP;
                 }
                 break;
 
             case 'a':
-                if(myDir != RIGHT)
+                if (myDir != RIGHT)
                 {
-                myDir = LEFT;
+                    myDir = LEFT;
                 }
                 break;
 
             case 's':
-                if(myDir != UP)
+                if (myDir != UP)
                 {
-                myDir = DOWN;
+                    myDir = DOWN;
                 }
                 break;
 
             case 'd':
-                if(myDir != LEFT)
+                if (myDir != LEFT)
                 {
-                myDir = RIGHT;
+                    myDir = RIGHT;
                 }
                 break;
 
             case 'W':
-                if(myDir != DOWN)
+                if (myDir != DOWN)
                 {
-                myDir = UP;
+                    myDir = UP;
                 }
                 break;
 
             case 'A':
-                if(myDir != RIGHT)
+                if (myDir != RIGHT)
                 {
-                myDir = LEFT;
+                    myDir = LEFT;
                 }
                 break;
 
             case 'S':
-                if(myDir != UP)
+                if (myDir != UP)
                 {
-                myDir = DOWN;
+                    myDir = DOWN;
                 }
                 break;
 
             case 'D':
-                if(myDir != LEFT)
+                if (myDir != LEFT)
                 {
-                myDir = RIGHT;
+                    myDir = RIGHT;
                 }
                 break;
 
             default:
                 break;
-        }
+            }
             mainGameMechsRef->setInput(0);
         }
     }
 }
 
+// Player movement
 void Player::movePlayer()
 {
     // PPA3 FSM logic
     objPos snakeHead = playerPosList->getHeadElement();
-    
+
     switch (myDir)
     {
     case LEFT:
-        if(snakeHead.pos->x <= 0)
-            {
-                snakeHead.pos->x = mainGameMechsRef->getBoardSizeX() - 2;
-            }
+        if (snakeHead.pos->x <= 0)
+        {
+            snakeHead.pos->x = mainGameMechsRef->getBoardSizeX() - 2;
+        }
         snakeHead.pos->x--;
         break;
 
     case RIGHT:
-        if(snakeHead.pos->x == mainGameMechsRef->getBoardSizeX() - 2)
-            {
-                snakeHead.pos->x = 0;
-            }
+        if (snakeHead.pos->x == mainGameMechsRef->getBoardSizeX() - 2)
+        {
+            snakeHead.pos->x = 0;
+        }
         snakeHead.pos->x++;
         break;
 
     case UP:
-        if(snakeHead.pos->y <= 0)
-            {
-                snakeHead.pos->y = mainGameMechsRef->getBoardSizeY() - 2;
-            }
+        if (snakeHead.pos->y <= 0)
+        {
+            snakeHead.pos->y = mainGameMechsRef->getBoardSizeY() - 2;
+        }
         snakeHead.pos->y--;
         break;
 
     case DOWN:
-        if(snakeHead.pos->y == mainGameMechsRef->getBoardSizeY() - 2)
-            {
-                snakeHead.pos->y = 0;
-            }
+        if (snakeHead.pos->y == mainGameMechsRef->getBoardSizeY() - 2)
+        {
+            snakeHead.pos->y = 0;
+        }
         snakeHead.pos->y++;
         break;
-    
+
     case STOP:
         break;
     }
@@ -164,7 +165,7 @@ void Player::movePlayer()
     playerPosList->insertHead(snakeHead);
     playerPosList->removeTail();
 
-    int i; 
+    int i;
 
     for (i = 1; i < playerPosList->getSize(); i++)
     {
@@ -176,7 +177,6 @@ void Player::movePlayer()
     }
 }
 
-
 // More methods to be added
 
 bool Player::checkFoodConsumption(Food *foodItem)
@@ -184,12 +184,13 @@ bool Player::checkFoodConsumption(Food *foodItem)
     return playerPosList->getElement(0) == foodItem->getFoodPos();
 }
 
+// Increasing elngth after having a food item
 void Player::increasePlayerLength(Food *foodItem)
 {
     objPos currentHead = playerPosList->getHeadElement();
 
     objPos snakeHead = currentHead;
-    
+
     snakeHead.symbol = '*';
 
     playerPosList->insertHead(snakeHead);

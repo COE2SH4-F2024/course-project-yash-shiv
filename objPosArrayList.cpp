@@ -1,12 +1,14 @@
+
 #include "objPosArrayList.h"
 #include <stdexcept>
 
 // Check lecture contents on general purpose array list construction,
 // and modify it to support objPos array list construction.
 
+// default constructor (intialized to 0)
 objPosArrayList::objPosArrayList()
 {
-    int i; 
+    int i;
     arraySize = ARRAY_MAX_CAP;
     aList = new objPos[arraySize];
     listSize = 0;
@@ -18,10 +20,10 @@ objPosArrayList::objPosArrayList()
         (aList + i)->symbol = 0;
     }
 }
-
+// copy constructor
 objPosArrayList::objPosArrayList(const objPosArrayList &other)
 {
-    int i; 
+    int i;
 
     listSize = other.listSize;
     arraySize = other.arraySize;
@@ -33,10 +35,11 @@ objPosArrayList::objPosArrayList(const objPosArrayList &other)
     }
 }
 
+// copy assignment operator
 objPosArrayList &objPosArrayList::operator=(const objPosArrayList &other)
 {
-    int i; 
-    
+    int i;
+
     if (this != &other)
     {
         listSize = other.listSize;
@@ -48,15 +51,15 @@ objPosArrayList &objPosArrayList::operator=(const objPosArrayList &other)
         }
     }
     return *this;
-
 }
 
+// doubling the size of array if the list is bigger than the array
 void objPosArrayList::doubleSize()
 {
-    int i; 
+    int i;
 
     arraySize *= 2;
-    objPos *newArr= new objPos[arraySize];
+    objPos *newArr = new objPos[arraySize];
     for (i = 0; i < listSize; i++)
     {
         *(newArr + i) = *(aList + i);
@@ -66,6 +69,8 @@ void objPosArrayList::doubleSize()
     aList = newArr;
     delete[] newArr;
 }
+
+// destructor is neccessary
 objPosArrayList::~objPosArrayList()
 {
     delete[] aList;
@@ -78,7 +83,7 @@ int objPosArrayList::getSize() const
 
 void objPosArrayList::insertHead(objPos thisPos)
 {
-    int i; 
+    int i;
 
     if (listSize == arraySize)
     {
@@ -90,8 +95,8 @@ void objPosArrayList::insertHead(objPos thisPos)
         *(aList + i) = *(aList + i - 1);
     }
     *aList = thisPos;
-    
-    listSize++;
+
+    listSize++; // increasing since we are adding element
 }
 
 void objPosArrayList::insertTail(objPos thisPos)
@@ -101,13 +106,13 @@ void objPosArrayList::insertTail(objPos thisPos)
         doubleSize();
     }
     *(aList + listSize) = thisPos;
-    
-    listSize++;
+
+    listSize++; // increasing since we are adding element
 }
 
 void objPosArrayList::removeHead()
 {
-    int i; 
+    int i;
 
     if (listSize > 0)
     {
@@ -115,9 +120,9 @@ void objPosArrayList::removeHead()
         {
             *(aList + i) = *(aList + i + 1);
         }
-        listSize--;
+        listSize--; // decreasing since we are removing element
     }
-    else 
+    else
     {
     }
 }
@@ -129,11 +134,11 @@ void objPosArrayList::removeTail()
     }
     else
     {
-        listSize--;
+        listSize--; // decreasing since we are removing element
     }
-    
 }
 
+// self explanatory
 objPos objPosArrayList::getHeadElement() const
 {
     return *(aList);
@@ -150,5 +155,5 @@ objPos objPosArrayList::getElement(int index) const
     {
         ;
     }
-    return *(aList + index);
+    return *(aList + index); // returning the value asked for
 }

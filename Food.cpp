@@ -1,3 +1,4 @@
+
 #include "Food.h"
 #include <time.h>
 
@@ -8,19 +9,16 @@ Food::Food(GameMechs *gameRef, objPosArrayList *playerPos)
     generateFood(playerPos);
 }
 
-Food::~Food()
-{
-}
-
 void Food::generateFood(objPosArrayList *blockOff)
 {
     srand(time(0)); // Seeds the random number generator with the current time
 
-    int i; 
+    int i;
     int foodPosX, foodPosY;
     bool condition = false; // Start with an invalid position
-     
-    int xRange, yRange; 
+
+    // this is setting the range for the numbers that can be randomly generates (on the board)
+    int xRange, yRange;
     xRange = mainGameMechsRef->getBoardSizeX() - 2;
     yRange = mainGameMechsRef->getBoardSizeY() - 2;
 
@@ -38,12 +36,12 @@ void Food::generateFood(objPosArrayList *blockOff)
         for (i = 0; i < blockOff->getSize(); i++)
         {
             objPos segment = blockOff->getElement(i);
-            
+
             // If food position overlaps with any blocked segment, mark it invalid
             if (foodPosX == segment.pos->x && foodPosY == segment.pos->y)
             {
                 condition = false; // Mark position as invalid
-                break; // Exit the loop early, as we need to generate a new position
+                break;             // Exit the loop early, as we need to generate a new position
             }
         }
     }
@@ -51,7 +49,6 @@ void Food::generateFood(objPosArrayList *blockOff)
     // Set the valid food position once found
     this->foodPos.setObjPos(foodPosX, foodPosY, foodPos.symbol);
 }
-
 
 objPos const Food::getFoodPos()
 {
@@ -61,5 +58,5 @@ objPos const Food::getFoodPos()
 bool Food::checkSelfCollision(objPosArrayList *playerPos)
 {
 
-    return playerPos->getElement(0) == foodPos;
+    return playerPos->getElement(0) == foodPos; // if the head matches the food posiiton
 }

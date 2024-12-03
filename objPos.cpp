@@ -1,6 +1,7 @@
 #include "objPos.h"
 #include <cstddef>
 
+// Default constructor: Initializes position to (0, 0) and symbol to null
 objPos::objPos()
 {
     pos = new Pos;
@@ -9,6 +10,7 @@ objPos::objPos()
     symbol = 0; // NULL
 }
 
+// Initializes position and symbol with given values
 objPos::objPos(int xPos, int yPos, char sym)
 {
     pos = new Pos;
@@ -22,7 +24,7 @@ objPos::objPos(int xPos, int yPos, char sym)
 // Destructor
 objPos::~objPos()
 {
-    delete pos;
+    delete pos; // deallocation
 }
 
 // Copy Constructor
@@ -60,6 +62,7 @@ void objPos::setObjPos(objPos o)
     symbol = o.symbol;
 }
 
+// setting object position with what is given
 void objPos::setObjPos(int xPos, int yPos, char sym)
 {
     pos->x = xPos;
@@ -67,6 +70,7 @@ void objPos::setObjPos(int xPos, int yPos, char sym)
     symbol = sym;
 }
 
+// returning the object position
 objPos objPos::getObjPos() const
 {
     objPos returnPos;
@@ -77,6 +81,7 @@ objPos objPos::getObjPos() const
     return returnPos;
 }
 
+// retriving the symbol
 char objPos::getSymbol() const
 {
     return symbol;
@@ -95,6 +100,7 @@ char objPos::getSymbolIfPosEqual(const objPos *refPos) const
         return 0;
 }
 
+// self-explanatory below
 void objPos::xPosIncrease()
 {
     (pos->x)++;

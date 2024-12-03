@@ -1,3 +1,4 @@
+
 #ifndef GAMEMECHS_H
 #define GAMEMECHS_H
 
@@ -25,7 +26,7 @@ private:
 public:
     GameMechs();
     GameMechs(int boardX, int boardY);
-    ~GameMechs(); // Not needed (explanaition in next cpp file)
+    // omitted the destructor as no heap memory is used here
 
     bool getExitFlagStatus() const;
     void setExitTrue();
@@ -41,8 +42,6 @@ public:
 
     int getScore() const;
     void incrementScore();
-
-    // More methods should be added here
 };
 
 #endif

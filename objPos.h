@@ -26,7 +26,7 @@ public:
     objPos(const objPos &reference);
 
     // Copy Assignemnt Operator
-    objPos &operator= (const objPos &reference);
+    objPos &operator=(const objPos &reference);
 
     bool operator==(const objPos &other);
 
@@ -43,7 +43,6 @@ public:
     void xPosDecrease();
     void yPosIncrease();
     void yPosDecrease();
-    
 };
 
 #endif

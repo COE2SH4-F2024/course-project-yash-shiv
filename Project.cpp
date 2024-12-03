@@ -80,7 +80,7 @@ void GetInput(void)
         }
 
         // this is to manage the speed level
-        if (userInput == '=' && currentSpeedIndex < 4)
+        if (userInput == '=' && currentSpeedIndex < 4) //Key set as '=' to avoid confusion and makes UX better and no need to press SHIFT key to access the actual '+' key
         {
             currentSpeedIndex++;
         }

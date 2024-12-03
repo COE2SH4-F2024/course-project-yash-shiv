@@ -80,7 +80,7 @@ void GetInput(void)
         }
 
         // this is to manage the speed level
-        if (userInput == '+' && currentSpeedIndex < 4)
+        if (userInput == '=' && currentSpeedIndex < 4)
         {
             currentSpeedIndex++;
         }
@@ -125,8 +125,8 @@ void DrawScreen(void)
         MacUILib_printf("\nWARNING: Your snake is now capable of colliding with itself. Make your moves wisely.\n\n");
     }
 
-    MacUILib_printf("1: Turtle Speed,   2: Slow,   3: Medium,   4: Fast,   5: Fastest\n\n");
-    MacUILib_printf("Speed Level: %d (Press '+' to increase, '-' to decrease)\n", currentSpeedIndex + 1);
+    MacUILib_printf("1: Slowest Speed,   2: Slow,   3: Medium,   4: Fast,   5: Fastest\n\n");
+    MacUILib_printf("Speed Level: %d (Press '+' key to increase, '-' to decrease)\n", currentSpeedIndex + 1);
     MacUILib_printf("-------------------------------------------------------------------\n");
     // Draw the game board
     int x, y;
